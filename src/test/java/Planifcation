@@ -1,0 +1,9 @@
+Comment faire ?
+On a un model Item.
+
+Le magasin (main) va stocker des items dans un tableau.
+Il possède une méthode update qui va appeler une factory pour chaque item.
+
+La factory possède un tableau d'objets instanciés de différentes classes correspondant aux différents items.
+
+

@@ -7,56 +7,77 @@ class Magasin {
         this.items = items;
     }
 
+    public void decreaseQuality(Item item, int value){
+        item.quality = item.quality - value;
+        item.sellIn = item.sellIn + 1;
+    }
+    public boolean checkQualityisNegative(Item item){
+        if (item.quality < 0 ){
+            return true;
+        }
+        else{
+            return false;
+
+        }
+    }
+
+    public boolean checkQualityLimite(Item item){
+        if (item.quality > 50 ){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
+    public void increaseQuality(Item item , int value){
+        item.quality = item.quality + value;
+        item.sellIn = item.sellIn + 1;
+    }
+
     public void updateQuality() {
+
         for (int i = 0; i < items.length; i++) {
-            if (!items[i].name.equals("Comté")
-                    && !items[i].name.equals("Pass VIP Concert")) {
-                if (items[i].quality > 0) {
-                    if (!items[i].name.equals("Kryptonite")) {
-                        items[i].quality = items[i].quality - 1;
+
+            boolean QualityLimite = checkQualityLimite(items[i]);
+            boolean QualityNegative = checkQualityisNegative(items[i]);
+
+            if (!QualityNegative && !QualityLimite) {
+
+                switch (items[i].name) {
+                    case "Comté" -> increaseQuality(items[i], 1);
+                    case "Pass VIP Concert" -> {
+                        if (items[i].sellIn > 10) {
+                            increaseQuality(items[i], 1);
+                        } else if (items[i].sellIn <= 10) {
+                            increaseQuality(items[i], 2);
+                        } else if (items[i].sellIn <= 5) {
+                            increaseQuality(items[i], 3);
+                        } else if (items[i].sellIn <= 0) {
+                            items[i].quality = 0;
+                        }
                     }
+                    case "Pouvoirs magiques" -> {
+                        if (items[i].sellIn <= 0) {
+                            decreaseQuality(items[i], 4);
+                        } else if (items[i].sellIn > 0) {
+                            decreaseQuality(items[i], 1);
+                        }
+                    }
+                    default -> {
+                        // Cas où l'item ne correspond à aucun des cas spécifiques
+                        if (!items[i].name.equals("Kryptonite")) {
+                            if (items[i].sellIn <= 0) {
+                                decreaseQuality(items[i], 2);
+                            } else {
+                                decreaseQuality(items[i], 1);
+                            }
+                        }
                 }
-            } else {
-                if (items[i].quality < 50) {
-                    items[i].quality = items[i].quality + 1;
 
-                    if (items[i].name.equals("Pass VIP Concert")) {
-                        if (items[i].sellIn < 11) {
-                            if (items[i].quality < 50) {
-                                items[i].quality = items[i].quality + 1;
-                            }
-                        }
 
-                        if (items[i].sellIn < 6) {
-                            if (items[i].quality < 50) {
-                                items[i].quality = items[i].quality + 1;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (!items[i].name.equals("Kryptonite")) {
-                items[i].sellIn = items[i].sellIn - 1;
-            }
-
-            if (items[i].sellIn < 0) {
-                if (!items[i].name.equals("Comté")) {
-                    if (!items[i].name.equals("Pass VIP Concert")) {
-                        if (items[i].quality > 0) {
-                            if (!items[i].name.equals("Kryptonite")) {
-                                items[i].quality = items[i].quality - 1;
-                            }
-                        }
-                    } else {
-                        items[i].quality = items[i].quality - items[i].quality;
-                    }
-                } else {
-                    if (items[i].quality < 50) {
-                        items[i].quality = items[i].quality + 1;
-                    }
                 }
             }
         }
-    }
-}
+
+    }}
